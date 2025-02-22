@@ -1,0 +1,14 @@
+.container1{
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-weight: 600;
+    text-align: end;
+    text-decoration: none;
+    display: flex;
+    justify-content: space-around;
+    color-interpolation-filters: sRGB;
+    color:black;
+    content: icon;
+    
+
+
+}

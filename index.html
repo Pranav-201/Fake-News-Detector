@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SatyaCheck - Fake News Detector</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1e1e2f, #2a2a40);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .nav-links a {
+            margin: 0 15px;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #3498db;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .hero-section h1 {
+            font-size: 2.5rem;
+            color: #ffffff;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .hero-section p {
+            color: #e0e0e0;
+            font-size: 1.1rem;
+        }
+
+        .input-section {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 1.5rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            resize: vertical;
+            font-size: 1.1rem;
+            background: rgba(8, 103, 108, 0.1);
+            color: #ffffff;
+            transition: border-color 0.3s ease;
+        }
+        textarea:hover{
+            background:  rgba(52, 187, 194, 0.1);
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #fdfdfd00;
+        }
+
+        .import-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.288);
+            color: rgb(0, 0, 0);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s ease;
+        }
+
+        .import-btn:hover {
+            background: rgba(216, 237, 251, 0.9);
+        }
+
+        .analyze-btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.3s;
+            display: block;
+            margin: 1.5rem auto;
+        }
+
+        .analyze-btn:hover {
+            background: linear-gradient(135deg, #2980b9, #3498db);
+            transform: translateY(-2px);
+        }
+
+        .result-section {
+            display: none;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-top: 2rem;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .result-section.visible {
+            display: block;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .loading.visible {
+            display: block;
+        }
+
+        .loading-dot {
+            animation: bounce 1.4s infinite ease-in-out;
+            display: inline-block;
+            margin: 0 3px;
+            color: #3498db;
+        }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+        }
+
+        .real-news {
+            background: rgba(39, 174, 96, 0.8);
+            color: white;
+        }
+
+        .fake-news {
+            background: rgba(231, 76, 60, 0.8);
+            color: white;
+        }
+
+        .how-it-works {
+            margin-top: 4rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .how-it-works:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.137);
+        }
+
+        .how-it-works h2 {
+            color: #ffffff;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .how-it-works p {
+            color: #e0e0e0;
+            font-size: 1rem;
+        }
+
+        .comparison-section {
+            display: none;
+            margin-top: 2rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .comparison-section.visible {
+            display: block;
+        }
+
+        .comparison-section h2 {
+            color: #ffffff;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .comparison-table th, .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .comparison-table th {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .comparison-table td {
+            color: #e0e0e0;
+        }
+
+        .comparison-table a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .comparison-table a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        footer p {
+            margin: 0.5rem 0;
+            color: #e0e0e0;
+        }
+        for{
+            color: rgb(231, 59, 59);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 1rem;
+                padding: 1rem;
+            }
+
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+        }
+
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .analysis-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+        }
+
+        .score-meter {
+            padding: 0.5rem;
+            border-radius: 5px;
+            color: white;
+            text-align: center;
+            margin: 0.5rem 0;
+            font-weight: bold;
+        }
+
+        .analysis-card h3 {
+            margin-bottom: 0.5rem;
+            color: #3498db;
+        }
+
+        .analysis-card ul {
+            list-style-position: inside;
+            padding-left: 0;
+        }
+
+        .analysis-card li {
+            margin: 0.3rem 0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo" >Satya<for class="che">Check</for></div>
+        <div class="nav-links">
+            <a href="home.html">Home</a>
+            <a href="index.html">Start Detecting</a>
+            <a href="index3.html">Latest Verified News</a>
+            <a href="#">Contact</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="hero-section">
+            <h1>Detect Fake News in Real Time</h1>
+            <p>Paste news content below to verify its authenticity</p>
+        </div>
+
+        <div class="input-section">
+            <textarea id="news-input" placeholder="Paste news article or statement here..."></textarea>
+            <label for="file-upload" class="import-btn">
+                <i class="fas fa-file-upload"></i> 
+            </label>
+            <input type="file" id="file-upload" accept=".txt" style="display: none;">
+            <button class="analyze-btn" onclick="analyzeNews()">
+                <i class="fas fa-search"></i> Analyze News
+            </button>
+        </div>
+
+        <div class="loading">
+            <div class="loading-dot">.</div>
+            <div class="loading-dot">.</div>
+            <div class="loading-dot">.</div>
+        </div>
+
+        <div class="result-section" id="result-section">
+            <h2 id="result-title"></h2>
+            <p id="result-description"></p>
+        </div>
+
+        <div class="comparison-section" id="comparison-section">
+            <h2>Comparison with Real and Fake News</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Source</th>
+                        <th>Link</th>
+                    </tr>
+                </thead>
+                <tbody id="comparison-body">
+                    <!-- Rows will be dynamically added here -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="how-it-works">
+            <h2>How It Works</h2>
+            <p>SatyaCheck uses advanced AI algorithms to analyze news content for authenticity indicators, source credibility, and factual accuracy.</p>
+        </div>
+    </div>
+
+   
+
+    <script>
+        async function analyzeNews() {
+            const input = document.getElementById('news-input').value;
+            const resultSection = document.getElementById('result-section');
+            const comparisonSection = document.getElementById('comparison-section');
+            const loading = document.querySelector('.loading');
+
+            if (!input.trim()) {
+                alert('Please enter some text to analyze');
+                return;
+            }
+
+            loading.classList.add('visible');
+            resultSection.classList.remove('visible');
+            comparisonSection.classList.remove('visible');
+
+            try {
+                const response = await fetch('http://localhost:5000/api/analyze', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ content: input })
+                });
+
+                const data = await response.json();
+                
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                loading.classList.remove('visible');
+                resultSection.classList.add('visible');
+                comparisonSection.classList.add('visible');
+
+                const result = JSON.parse(data.result);
+                displayResult(result);
+                displayComparison();
+            } catch (error) {
+                console.error('Error:', error);
+                loading.classList.remove('visible');
+                resultSection.classList.add('visible');
+                
+                // Display error message to user
+                document.getElementById('result-title').textContent = 'Error';
+                document.getElementById('result-description').innerHTML = `
+                    <p>An error occurred while analyzing the news:</p>
+                    <p>${error.message || 'Unknown error occurred'}</p>
+                    <p>Please try again later.</p>
+                `;
+            }
+        }
+
+        function displayResult(result) {
+            const resultSection = document.getElementById('result-section');
+            const title = document.getElementById('result-title');
+            const description = document.getElementById('result-description');
+
+            // Check if it's an error response
+            if (result.confidence === 0 && result.analysis.includes("Error processing")) {
+                resultSection.className = 'result-section visible';
+                resultSection.style.background = '#f39c12';  // Warning color for errors
+                title.textContent = 'Analysis Error';
+                description.innerHTML = `
+                    <div class="analysis-card">
+                        <h3>Error Details</h3>
+                        <p>The analysis could not be completed. Please try again with different content.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const isFake = result.is_fake;
+
+            // Set proper class and color based on the is_fake flag
+            if (isFake) {
+                resultSection.className = 'result-section fake-news visible';
+                title.textContent = 'Potential Fake News Detected!';
+                resultSection.style.background = 'rgba(231, 76, 60, 0.8)';  // Red for fake
+            } else {
+                resultSection.className = 'result-section real-news visible';
+                title.textContent = 'Genuine Content Detected';
+                resultSection.style.background = 'rgba(39, 174, 96, 0.8)';  // Green for genuine
+            }
+
+            const credibilityColor = getColorForScore(result.source_check.credibility_score);
+            const objectivityColor = getColorForScore(result.bias_analysis.objectivity_score);
+            const manipulationColor = getColorForScore(100 - result.bias_analysis.emotional_manipulation_score);
+            const confidenceColor = getColorForScore(result.confidence);
+
+            description.innerHTML = `
+                <div class="analysis-grid">
+                    <div class="analysis-card">
+                        <h3>Main Analysis</h3>
+                        <div class="score-meter" style="background: ${confidenceColor}">
+                            Confidence: ${result.confidence}%
+                        </div>
+                        <p>${result.analysis}</p>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <h3>Source Credibility</h3>
+                        <div class="score-meter" style="background: ${credibilityColor}">
+                            Credibility: ${result.source_check.credibility_score}%
+                        </div>
+                        <h4>Referenced Sources:</h4>
+                        <ul>
+                            ${result.source_check.mentioned_sources.map(source => `<li>${source}</li>`).join('') || '<li>No sources found</li>'}
+                        </ul>
+                    </div>
+
+                    <div class="analysis-card">
+                        <h3>Bias Analysis</h3>
+                        <p>Political Bias: ${result.bias_analysis.political_bias}</p>
+                        <div class="score-meter" style="background: ${objectivityColor}">
+                            Objectivity: ${result.bias_analysis.objectivity_score}%
+                        </div>
+                        <div class="score-meter" style="background: ${manipulationColor}">
+                            Emotional Manipulation: ${result.bias_analysis.emotional_manipulation_score}%
+                        </div>
+                    </div>
+
+                    <div class="analysis-card">
+                        <h3>Key Indicators</h3>
+                        <ul>
+                            ${result.key_indicators.map(indicator => `<li>${indicator}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Add this helper function for score colors
+        function getColorForScore(score) {
+            if (score >= 70) return '#27ae60';  // Green for good scores
+            if (score >= 40) return '#f39c12';  // Orange for medium scores
+            return '#e74c3c';  // Red for poor scores
+        }
+
+        function displayComparison() {
+            const comparisonBody = document.getElementById('comparison-body');
+            comparisonBody.innerHTML = `
+                <tr>
+                    <td>Real News</td>
+                    <td>BBC News</td>
+                    <td><a href="https://www.bbc.com/news" target="_blank">https://www.bbc.com/news</a></td>
+                </tr>
+                <tr>
+                    <td>Fake News</td>
+                    <td>Fake News Source</td>
+                    <td><a href="DemocraticReview.com" target="_blank">https://www.DemocraticReview.com</a></td>
+                </tr>
+            `;
+        }
+
+        // Handle Enter key press
+        document.getElementById('news-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                analyzeNews();
+            }
+        });
+
+        // Handle file upload
+        document.getElementById('file-upload').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file && file.type === "text/plain") {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('news-input').value = e.target.result;
+                };
+                reader.readAsText(file);
+            } else {
+                alert('Please upload a valid .txt file.');
+            }
+        });
+
+        // Add the styles to the document
+        const styleSheet = document.createElement("style");
+        styleSheet.textContent = `
+            .analysis-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 1rem;
+                margin-top: 1rem;
+            }
+
+            .analysis-card {
+                background: rgba(255, 255, 255, 0.1);
+                padding: 1rem;
+                border-radius: 10px;
+                backdrop-filter: blur(5px);
+            }
+
+            .score-meter {
+                padding: 0.5rem;
+                border-radius: 5px;
+                color: white;
+                text-align: center;
+                margin: 0.5rem 0;
+                font-weight: bold;
+            }
+
+            .analysis-card h3 {
+                margin-bottom: 0.5rem;
+                color: #3498db;
+            }
+
+            .analysis-card ul {
+                list-style-position: inside;
+                padding-left: 0;
+            }
+
+            .analysis-card li {
+                margin: 0.3rem 0;
+            }
+        `;
+        document.head.appendChild(styleSheet);
+    </script>
+</body>
+</html>

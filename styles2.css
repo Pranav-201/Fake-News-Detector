@@ -1,0 +1,213 @@
+* {
+    box-sizing: border-box;
+  }
+  
+  body {
+    background-color: white;
+    font-size: 16px;
+    margin: 20px;
+    font-family: Inter, sans-serif;
+  }
+  
+  .container {
+    max-width: 1100px;
+    margin: auto;
+  }
+  
+  .navigation {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-block: 20px;
+    margin: auto;
+  }
+  
+  .logo img {
+    width: 50px;
+  }
+  
+  .heading a {
+    cursor: pointer;
+    padding-left: 20px;
+    text-decoration: none;
+    color: gray;
+    display: inline-block;
+  }
+  
+  .heading a:hover {
+    color: rgb(253, 81, 81);
+  }
+  
+  .menu-icon {
+    display: none;
+    cursor: pointer;
+  }
+  
+  .menu-icon img {
+    width: 30px;
+  }
+  
+  .active {
+    display: none;
+  }
+  
+  .mobile-menu {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    padding: 10px;
+  }
+  
+  .mobile-menu a {
+    text-decoration: none;
+    color: gray;
+    padding: 10px;
+    display: block;
+  }
+  
+  .mobile-menu a:hover {
+    color: rgb(253, 81, 81);
+  }
+  
+  main {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+  
+  .left-main {
+    width: 80%;
+    padding-right: 10px;
+  }
+  
+  .left-main img {
+    width: 100%;
+    
+  }
+  
+  .body-text {
+    display: flex;
+  }
+  
+  .body-text h1 {
+    font-size: 25px;
+    width: 50%;
+  }
+  
+  .body-text p {
+    font-size: 16px;
+    width: 50%;
+  }
+  
+  .body-text span {
+    background-color: rgb(253, 81, 81);
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .body-text span:hover {
+    background-color: black;
+    color: white;
+  }
+  
+  .right-main {
+    padding: 10px;
+    width: 40%;
+    background-color: black;
+  }
+  
+  .right-main h1 {
+    color: rgb(237, 155, 15);
+    font-size: 25px;
+  }
+  
+  .right-main .section {
+    margin: 10px;
+  }
+  
+  .section h3 {
+    cursor: pointer;
+    color: white;
+  }
+  
+  .section h3:hover {
+    color: rgb(237, 155, 15);
+  }
+  
+  .section p {
+    color: gray;
+  }
+  
+  footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .card {
+    gap: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 2px solid rgba(0, 0, 0, 0.033);
+    margin: 18px;
+    
+    padding: 4px;
+    height: 280px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.346);
+    margin-top: 100px;
+  }
+  .card:hover{
+    background: rgba(245, 222, 179, 0.125);
+    scale: 1.1;
+    transition: 500ms;
+    border-bottom: 3px solid rgba(38, 38, 38, 0.472) ;
+  }
+  
+  .card-image img {
+    width: 130px;
+  }
+  
+  .card-text h1 {
+    color: rgb(253, 81, 81);
+  }
+  
+  .card-text h3:hover {
+    color: rgb(253, 81, 81);
+  }
+  
+  .footer {
+    margin: 50px;
+    text-align: center;
+    
+  }
+  
+  @media (max-width: 600px) {
+    .heading {
+      display: none;
+    }
+  
+    .menu-icon {
+      display: block;
+    }
+  
+    main {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+  
+    .body-text {
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+  
+    footer {
+      flex-direction: column;
+    }
+  }
